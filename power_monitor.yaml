@@ -1,0 +1,71 @@
+blueprint:
+  name: Suivi d'un appareil via un capteur de courant
+  description: Crée une automation qui détecte si un appareil est en marche en fonction de son courant.
+  domain: automation
+  input:
+    power_sensor:
+      name: Capteur de courant
+      description: Sélectionne le capteur de courant de l'appareil.
+      selector:
+        entity:
+          domain: sensor
+    binary_sensor_name:
+      name: Nom du capteur binaire
+      description: Entité du capteur binaire à mettre à jour.
+      #selector:
+      #  entity:
+      #    domain: binary_sensor
+    threshold:
+      name: Seuil de détection (A)
+      description: Valeur minimale de courant pour considérer que l'appareil est en marche.
+      default: 0.030
+      selector:
+        number:
+          min: 0.005
+          max: 10
+          step: 0.010
+          unit_of_measurement: "A"
+    delay_off:
+      name: Délai avant arrêt
+      description: Temps en secondes avant que l'appareil soit considéré comme éteint.
+      default: 300  # 5 minutes
+      selector:
+        number:
+          min: 0
+          max: 3600
+          unit_of_measurement: "sec"
+
+
+mode: restart
+
+trigger:
+  - platform: state
+    entity_id: !input power_sensor
+
+condition: []
+
+action:
+  - variables:
+      power_sensor: !input power_sensor
+      threshold: !input threshold
+      #delay_off: !input delay_off
+  - service: persistent_notification.create
+    data:
+      title: "Debug - Appareil suivi"
+      message: "Capteur: {{ states(power_sensor) }}A / Seuil: {{ threshold }}A"
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ states(power_sensor) | float(0) >  threshold }}"
+        sequence:
+          - service: homeassistant.turn_on
+            entity_id: !input binary_sensor_name
+      - conditions:
+          - condition: template
+            value_template: "{{ states(power_sensor) | float(0) <=  threshold }}"
+        sequence:
+          #- delay:
+          #    seconds: "{{ delay_off }}"
+          #    sequence:
+          - service: homeassistant.turn_off
+            entity_id: !input binary_sensor_name
