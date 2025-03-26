@@ -12,9 +12,9 @@ blueprint:
     binary_sensor_name:
       name: Nom du capteur binaire
       description: Entité du capteur binaire à mettre à jour.
-      #selector:
-      #  entity:
-      #    domain: binary_sensor
+      selector:
+        entity:
+          domain: binary_sensor
     threshold:
       name: Seuil de détection (A)
       description: Valeur minimale de courant pour considérer que l'appareil est en marche.
