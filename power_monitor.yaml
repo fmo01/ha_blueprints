@@ -31,14 +31,14 @@ blueprint:
           unit_of_measurement: "A"
     delay_from_off:
       name: Délai avant arrêt
-      description: Temps en secondes avant que l'appareil soit considéré comme éteint.
+      description: Temps en minutes avant que l'appareil soit considéré comme éteint.
       default: 5  # 5 minutes
       selector:
         number:
-          min: 0
-          max: 60
+          min: 0.0
+          max: 60.0
+          step: 1.0
           unit_of_measurement: "min"
-
 
 mode: restart
 
@@ -56,7 +56,7 @@ action:
   - service: persistent_notification.create
     data:
       title: "Debug - Appareil suivi"
-      message: "Capteur: {{ states(power_sensor) }}A / Seuil: {{ threshold }}A"
+      message: "Capteur: {{ states(power_sensor) }}A / Seuil: {{ threshold }}A "
   - choose:
       - conditions:
           - condition: template
