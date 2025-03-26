@@ -30,12 +30,12 @@ blueprint:
     delay_off:
       name: Délai avant arrêt
       description: Temps en secondes avant que l'appareil soit considéré comme éteint.
-      default: 300  # 5 minutes
+      default: 5  # 5 minutes
       selector:
         number:
           min: 0
-          max: 3600
-          unit_of_measurement: "sec"
+          max: 60
+          unit_of_measurement: "min"
 
 
 mode: restart
@@ -50,7 +50,7 @@ action:
   - variables:
       power_sensor: !input power_sensor
       threshold: !input threshold
-      #delay_off: !input delay_off
+      delay_off: !input delay_off
   - service: persistent_notification.create
     data:
       title: "Debug - Appareil suivi"
@@ -66,8 +66,8 @@ action:
           - condition: template
             value_template: "{{ states(power_sensor) | float(0) <=  threshold }}"
         sequence:
-          #- delay:
-          #    seconds: "{{ delay_off }}"
-          #    sequence:
+          - delay:
+              seconds: "{{ delay_off*60 }}"
+              sequence:
           - service: homeassistant.turn_off
             entity_id: !input binary_sensor_name
