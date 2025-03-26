@@ -3,7 +3,7 @@ blueprint:
   description: 
     Crée une automation qui détecte si un appareil est en marche en fonction de son courant.
 
-    Etape 1 creation d'un "sensor"
+    Etape 1 creation d'un "sensor" energy
     
   domain: automation
   input:
@@ -39,6 +39,12 @@ blueprint:
           max: 60.0
           step: 1.0
           unit_of_measurement: "min"
+    icon_:
+      name: Icône 
+      description: Icône de  l'appareil 
+      default: "mdi:power-plug"
+      selector:
+        text: {}
 
 mode: restart
 
