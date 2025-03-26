@@ -72,12 +72,7 @@ action:
             entity_id: !input binary_sensor_name
           - service: homeassistant.update_entity
             entity_id: !input binary_sensor_name
-          - service: homeassistant.set_value
-            target:
-              entity_id: !input last_update
-            data:
-              #icon: "{{ icon_on }}"
-              value: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"  
+
       - conditions:
           - condition: template
             value_template: "{{ states(power_sensor) | float(0) <=  threshold }}"
@@ -88,10 +83,5 @@ action:
             entity_id: !input binary_sensor_name
           - service: homeassistant.update_entity
             entity_id: !input binary_sensor_name
-          - service: homeassistant.set_value
-            target:
-              entity_id: !input last_update
-            data:
-              #icon: "{{ icon_on }}"
-              value: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"  
+
             
