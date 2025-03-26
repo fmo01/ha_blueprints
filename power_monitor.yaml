@@ -1,6 +1,13 @@
 blueprint:
   name: Suivi d'un appareil via un capteur de courant
-  description: Crée une automation qui détecte si un appareil est en marche en fonction de son courant.
+  description: ## ⚙️ Control anything with **IKEA RODRET** or **IKEA SOMRIG** or **IKEA TRADFRI ON/OFF** remotes
+
+
+    Only for use with [ZHA](https://www.home-assistant.io/integrations/zha/)
+    or Zigbee2MQTT (cf [MQTT](https://www.home-assistant.io/integrations/mqtt)
+    + [Z2M addon](https://www.zigbee2mqtt.io/guide/installation/03_ha_addon.html)).
+    
+    Crée une automation qui détecte si un appareil est en marche en fonction de son courant.
   domain: automation
   input:
     power_sensor:
