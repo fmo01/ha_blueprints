@@ -69,7 +69,7 @@ action:
             value_template: "{{ states(power_sensor) | float(0) <=  threshold }}"
         sequence:
           - delay:
-              seconds: "{{ delay_from_off | int * 60 }}"
+              seconds: {{ delay_from_off | int * 60 }}
               sequence:
           - service: homeassistant.turn_off
             entity_id: !input binary_sensor_name
