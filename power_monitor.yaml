@@ -64,6 +64,14 @@ action:
         sequence:
           - service: homeassistant.turn_on
             entity_id: !input binary_sensor_name
+          - service: homeassistant.update_entity
+            entity_id: !input binary_sensor_name
+          - service: homeassistant.set_state
+            entity_id: !input binary_sensor_name
+            data:
+              #icon: "{{ icon_on }}"
+              attributes:
+                last_update: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"  
       - conditions:
           - condition: template
             value_template: "{{ states(power_sensor) | float(0) <=  threshold }}"
@@ -72,3 +80,12 @@ action:
               seconds: "{{ delay_from_off | int * 60 }}"
           - service: homeassistant.turn_off
             entity_id: !input binary_sensor_name
+          - service: homeassistant.update_entity
+            entity_id: !input binary_sensor_name
+          - service: homeassistant.set_state
+            entity_id: !input binary_sensor_name
+            data:
+              #icon: "{{ icon_on }}"
+              attributes:
+                last_update: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"  
+            
