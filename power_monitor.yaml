@@ -1,4 +1,4 @@
-blueprint:
+_valueblueprint:
   name: Suivi d'un appareil via un capteur de courant
   description: 
     Crée une automation qui détecte si un appareil est en marche en fonction de son courant.
@@ -72,12 +72,12 @@ action:
             entity_id: !input binary_sensor_name
           - service: homeassistant.update_entity
             entity_id: !input binary_sensor_name
-          - service: homeassistant.set_state
-            entity_id: !input binary_sensor_name
+          - service: homeassistant.set_value
+            target:
+              entity_id: !input binary_sensor_name
             data:
               #icon: "{{ icon_on }}"
-              attributes:
-                last_update: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"  
+              last_update: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"  
       - conditions:
           - condition: template
             value_template: "{{ states(power_sensor) | float(0) <=  threshold }}"
@@ -88,10 +88,10 @@ action:
             entity_id: !input binary_sensor_name
           - service: homeassistant.update_entity
             entity_id: !input binary_sensor_name
-          - service: homeassistant.set_state
-            entity_id: !input binary_sensor_name
+          - service: homeassistant.set_value
+            target:
+              entity_id: !input binary_sensor_name
             data:
               #icon: "{{ icon_on }}"
-              attributes:
-                last_update: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"  
+              last_update: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"  
             
