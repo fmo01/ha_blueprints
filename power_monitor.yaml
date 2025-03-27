@@ -92,8 +92,9 @@ action:
               seconds: "{{ delay_from_off | int * 60 }}"
           - service: homeassistant.turn_off
             entity_id: !input binary_sensor_name
+          - service: homeassistant.set_entity_attributes
+            data:
+              entity_id: !input binary_sensor_name
+              icon: !input icon_            
           - service: homeassistant.update_entity
             entity_id: !input binary_sensor_name
-sensor:
-  icon: "{{ icon_on }}"
-  availability: "{{ has_value(binary_sensor_name) }}"
