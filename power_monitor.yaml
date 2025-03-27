@@ -83,5 +83,9 @@ action:
             entity_id: !input binary_sensor_name
           - service: homeassistant.update_entity
             entity_id: !input binary_sensor_name
+            data:
+              #icon: "{{ icon_on }}"
+              attributes:
+                last_update: "{{ now().strftime('%Y-%m-%d %H:%M:%S') 
 
             
