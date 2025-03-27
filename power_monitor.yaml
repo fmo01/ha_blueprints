@@ -2,11 +2,11 @@ blueprint:
   name: Suivi d'un appareil via un capteur de courant
   description: 
     Crée une automation qui détecte si un appareil est en marche en fonction de son courant.
-
+    
     Etape 1 creation d'un "sensor" energy
-
+    
     **If you like my blueprints, and would like to show your support or just say thank you?** [Click Here](https://www.paypal.com/donate/?hosted_button_id=WAZS3QSDTPGA8) 🙂
-
+    
     <details>
     <summary><b>The Automation Process:</b> 👈</summary>
       - **Actions:**
