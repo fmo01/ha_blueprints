@@ -1,4 +1,4 @@
-_valueblueprint:
+blueprint:
   name: Suivi d'un appareil via un capteur de courant
   description: 
     Crée une automation qui détecte si un appareil est en marche en fonction de son courant.
