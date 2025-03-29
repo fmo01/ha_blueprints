@@ -24,12 +24,12 @@ blueprint:
       selector:
         entity:
           domain: sensor
-    binary_sensor_name:
+    boolean_sensor_name:
       name: Nom du capteur binaire
       description: Entité du capteur binaire à mettre à jour.
       selector:
         entity:
-          domain: binary_sensor
+          domain: input_boolean
     threshold:
       name: Seuil de détection (A)
       description: Valeur minimale de courant pour considérer que l'appareil est en marche.
@@ -50,12 +50,6 @@ blueprint:
           max: 60.0
           step: 1.0
           unit_of_measurement: "min"
-    icon_:
-      name: Icône 
-      description: Icône de  l'appareil 
-      default: "mdi:power-plug"
-      selector:
-        text: {}
 
 mode: restart
 
@@ -80,9 +74,9 @@ action:
             value_template: "{{ states(power_sensor) | float(0) >  threshold }}"
         sequence:
           - service: homeassistant.turn_on
-            entity_id: !input binary_sensor_name
+            entity_id: !input boolean_sensor_name
           - service: homeassistant.update_entity
-            entity_id: !input binary_sensor_name
+            entity_id: !input boolean_sensor_name
 
       - conditions:
           - condition: template
@@ -91,10 +85,6 @@ action:
           - delay: 
               seconds: "{{ delay_from_off | int * 60 }}"
           - service: homeassistant.turn_off
-            entity_id: !input binary_sensor_name
-          - service: homeassistant.set_entity_attributes
-            data:
-              entity_id: !input binary_sensor_name
-              icon: !input icon_            
+            entity_id: !input boolean_sensor_name
           - service: homeassistant.update_entity
-            entity_id: !input binary_sensor_name
+            entity_id: !input boolean_sensor_name
