@@ -1,21 +1,6 @@
 blueprint:
   name: Suivi d'un appareil via un capteur de courant
-  description: 
-    Crée une automation qui détecte si un appareil est en marche en fonction de son courant.
-    
-    Etape 1 creation d'un "sensor" energy
-    
-    **If you like my blueprints, and would like to show your support or just say thank you?** [Click Here](https://www.paypal.com/donate/?hosted_button_id=WAZS3QSDTPGA8) 🙂
-    
-    <details>
-    <summary><b>The Automation Process:</b> 👈</summary>
-      - **Actions:**
-          - Tracks if an entity is manually turned ON and OFF, updating the toggle helper to reflect the control method.
-          - If the entity is turned ON by an automation, the toggle helper remains unchanged.
-      - **Auto OFF Options:**
-          - Automatically turns off the target entity and toggle helper.
-          - Automatically turns off the toggle helper.
-    </details>
+  description: Crée une automation qui détecte si un appareil est en marche en fonction de son courant.
   domain: automation
   input:
     power_sensor:
