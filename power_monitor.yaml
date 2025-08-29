@@ -49,9 +49,11 @@ action:
       power_sensor: !input power_sensor
       threshold: !input threshold
       delay_from_off: !input delay_from_off
+      boolean_sensor_name: !input boolean_sensor_name
+      boolean_sensor_friendly: "{{ state_attr(boolean_sensor_name, 'friendly_name') }}"
   - service: persistent_notification.create
     data:
-      title: "Debug - Appareil suivi"
+      title: "Suivi - {{ boolean_sensor_friendly }}"
       message: "Capteur: {{ states(power_sensor) }}A / Seuil: {{ threshold }}A "
   - choose:
       - conditions:
