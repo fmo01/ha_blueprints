@@ -7,7 +7,6 @@ blueprint:
   input:
     capteur_temperature:
       name: Capteur de température
-      description: Entité température du capteur Zigbee
       selector:
         entity:
           domain: sensor
@@ -15,7 +14,6 @@ blueprint:
 
     capteur_batterie:
       name: Capteur de batterie
-      description: Entité batterie du même capteur
       selector:
         entity:
           domain: sensor
@@ -23,7 +21,6 @@ blueprint:
 
     seuil_batterie:
       name: Seuil batterie (%)
-      description: Alerte si la batterie descend sous ce seuil
       default: 20
       selector:
         number:
@@ -33,7 +30,6 @@ blueprint:
 
     delai_inactivite:
       name: Délai d'inactivité (heures)
-      description: Alerte si aucune donnée reçue depuis ce délai
       default: 2
       selector:
         number:
@@ -43,18 +39,16 @@ blueprint:
 
     service_notification:
       name: Service de notification
-      description: "Ex notify mobile_app_mon_telephone"
+      description: Ex: notify.mobile_app_mon_telephone
       selector:
         text:
 
 trigger:
-  # Trigger 1 — batterie faible
   - platform: numeric_state
     id: batterie_faible
     entity_id: !input capteur_batterie
     below: !input seuil_batterie
 
-  # Trigger 2 — inactivité (vérification toutes les 30 min)
   - platform: time_pattern
     id: check_inactivite
     minutes: "/30"
@@ -62,38 +56,29 @@ trigger:
 condition:
   - condition: or
     conditions:
-      # Condition pour trigger batterie
       - condition: trigger
         id: batterie_faible
-
-      # Condition pour trigger inactivité
       - condition: and
         conditions:
           - condition: trigger
             id: check_inactivite
           - condition: template
             value_template: >
-              {% set delai = expand(trigger.entity_id | default('')) %}
-              {% set heures = iif(delai == '', !input delai_inactivite, !input delai_inactivite) %}
-              {{ (now() - states[!input capteur_temperature].last_updated).total_seconds() 
-                 > (!input delai_inactivite) * 3600 }}
+              {{ (now() - states[!input capteur_temperature].last_updated).total_seconds()
+                 > !input delai_inactivite * 3600 }}
 
 action:
-  - variables:
-      nom_capteur: "{{ state_attr(!input capteur_temperature, 'friendly_name') or !input capteur_temperature }}"
-      batterie: "{{ states(!input capteur_batterie) }}"
-      derniere_maj: >
-        {{ relative_time(states[!input capteur_temperature].last_updated) }}
-      raison: >
-        {% if trigger.id == 'batterie_faible' %}
-          🔋 Batterie faible : {{ batterie }}%
-        {% else %}
-          📡 Inactif depuis : {{ derniere_maj }}
-        {% endif %}
-
   - service: !input service_notification
     data:
-      title: "⚠️ Capteur Zigbee — {{ nom_capteur }}"
+      title: >
+        ⚠️ Capteur Zigbee — {{ state_attr(!input capteur_temperature, 'friendly_name') 
+        | default(!input capteur_temperature) }}
       message: >
-        {{ raison }}
+        {% if trigger.id == 'batterie_faible' %}
+          🔋 Batterie faible : {{ states(!input capteur_batterie) }}%
+        {% else %}
+          📡 Inactif depuis : {{ relative_time(states[!input capteur_temperature].last_updated) }}
+        {% endif %}
         — Pensez à vérifier la pile !
+
+mode: single
