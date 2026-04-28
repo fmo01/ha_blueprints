@@ -29,7 +29,7 @@ blueprint:
           unit_of_measurement: "%"
 
     delai_inactivite:
-      name: Délai d'inactivité (heures)
+      name: Délai d inactivite en heures
       default: 2
       selector:
         number:
@@ -39,7 +39,6 @@ blueprint:
 
     service_notification:
       name: Service de notification
-      description: "Ex: notify.mobile_app_mon_telephone"
       selector:
         text:
 
@@ -71,14 +70,14 @@ action:
   - service: !input service_notification
     data:
       title: >
-        ⚠️ Capteur Zigbee — {{ state_attr(!input capteur_temperature, 'friendly_name')
+        Capteur Zigbee : {{ state_attr(!input capteur_temperature, 'friendly_name')
         | default(!input capteur_temperature) }}
       message: >
         {% if trigger.id == 'batterie_faible' %}
-        🔋 Batterie faible : {{ states(!input capteur_batterie) }}%
+        Batterie faible : {{ states(!input capteur_batterie) }}%
         {% else %}
-        📡 Inactif depuis : {{ relative_time(states[!input capteur_temperature].last_updated) }}
+        Inactif depuis : {{ relative_time(states[!input capteur_temperature].last_updated) }}
         {% endif %}
-        — Pensez à vérifier la pile !
+        Pensez a verifier la pile !
 
 mode: single
