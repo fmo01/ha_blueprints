@@ -41,6 +41,10 @@ blueprint:
           filter:
             integration: mobile_app
 
+variables:
+  capteur_temp: !input capteur_temperature
+  delai_h: !input delai_inactivite
+
 trigger:
   - platform: numeric_state
     id: batterie_faible
@@ -61,21 +65,21 @@ condition:
             id: check_inactivite
           - condition: template
             value_template: >
-              {{ (now() - states[!input capteur_temperature].last_updated).total_seconds()
-                 > !input delai_inactivite * 3600 }}
+              {{ (now() - states[capteur_temp].last_updated).total_seconds()
+                 > delai_h * 3600 }}
 
 action:
   - domain: mobile_app
     type: notify
     device_id: !input notify_device
     title: >
-      Capteur Zigbee : {{ state_attr(!input capteur_temperature, 'friendly_name')
-      | default(!input capteur_temperature) }}
+      Capteur Zigbee : {{ state_attr(capteur_temp, 'friendly_name')
+      | default(capteur_temp) }}
     message: >
       {% if trigger.id == 'batterie_faible' %}
       Batterie faible : {{ states(!input capteur_batterie) }}%
       {% else %}
-      Inactif depuis : {{ relative_time(states[!input capteur_temperature].last_updated) }}
+      Inactif depuis : {{ relative_time(states[capteur_temp].last_updated) }}
       {% endif %}
       Pensez a verifier la pile !
 
