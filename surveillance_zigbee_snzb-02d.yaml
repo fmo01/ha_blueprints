@@ -43,7 +43,7 @@ blueprint:
 
     service_notification:
       name: Service de notification
-      description: "Ex: notify mobile_app_mon_telephone"
+      description: "Ex notify mobile_app_mon_telephone"
       selector:
         text:
 
