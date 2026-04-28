@@ -1,7 +1,7 @@
 blueprint:
   name: Capteur Zigbee - Surveillance pile et inactivité
   description: >
-    Alerte si un capteur ne répond plus depuis X heures 
+    Alerte si un capteur ne répond plus depuis X heures
     ou si sa batterie passe sous un seuil défini.
   domain: automation
   input:
@@ -39,7 +39,7 @@ blueprint:
 
     service_notification:
       name: Service de notification
-      description: Ex: notify.mobile_app_mon_telephone
+      description: "Ex: notify.mobile_app_mon_telephone"
       selector:
         text:
 
@@ -71,13 +71,13 @@ action:
   - service: !input service_notification
     data:
       title: >
-        ⚠️ Capteur Zigbee — {{ state_attr(!input capteur_temperature, 'friendly_name') 
+        ⚠️ Capteur Zigbee — {{ state_attr(!input capteur_temperature, 'friendly_name')
         | default(!input capteur_temperature) }}
       message: >
         {% if trigger.id == 'batterie_faible' %}
-          🔋 Batterie faible : {{ states(!input capteur_batterie) }}%
+        🔋 Batterie faible : {{ states(!input capteur_batterie) }}%
         {% else %}
-          📡 Inactif depuis : {{ relative_time(states[!input capteur_temperature].last_updated) }}
+        📡 Inactif depuis : {{ relative_time(states[!input capteur_temperature].last_updated) }}
         {% endif %}
         — Pensez à vérifier la pile !
 
