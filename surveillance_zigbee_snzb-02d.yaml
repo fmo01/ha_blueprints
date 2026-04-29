@@ -104,7 +104,7 @@ action:
   # Notification Telegram
   - service: telegram_bot.send_message
     data:
-      target: -4760434116
+      chat_id: -4760434116
       message: >
         Capteur Zigbee : {{ state_attr(capteur_temp, 'friendly_name')
         | default(capteur_temp) }}
