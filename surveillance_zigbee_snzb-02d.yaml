@@ -70,6 +70,7 @@ condition:
                  > delai_h * 3600 }}
 
 action:
+  # Notification mobile
   - domain: mobile_app
     type: notify
     device_id: !input notify_device
@@ -84,4 +85,18 @@ action:
       {% endif %}
       Pensez a verifier la pile !
 
-mode: single
+  # Notification persistante dans l'IHM HA
+  - service: persistent_notification.create
+    data:
+      title: >
+        Capteur Zigbee : {{ state_attr(capteur_temp, 'friendly_name')
+        | default(capteur_temp) }}
+      message: >
+        {% if trigger.id == 'batterie_faible' %}
+        Batterie faible : {{ states(capteur_batt) }}%
+        {% else %}
+        Inactif depuis : {{ relative_time(states[capteur_temp].last_updated) }}
+        {% endif %}
+        Pensez a verifier la pile !
+      notification_id: >
+        zigbee_{{ capteur_temp }}
